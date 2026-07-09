@@ -46,9 +46,9 @@ const rewardRoutes = require("./routes/rewardRoutes");
 
 app.use("/api/rewardpoints", rewardRoutes);
 
-const comboRoutes = require("./routes/comboRoutes");
+// const comboRoutes = require("./routes/comboRoutes");
  
-app.use("/api/combo", comboRoutes);
+// app.use("/api/combo", comboRoutes);
  
 
 const vendorRoutes = require("./routes/vendorRoutes");
