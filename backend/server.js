@@ -42,6 +42,9 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 const rewardRoutes = require("./routes/rewardRoutes");
 
+console.log("rewardRoutes TYPE:", typeof rewardRoutes);
+console.log("rewardRoutes VALUE:", rewardRoutes);
+
 app.use("/api/rewardpoints", rewardRoutes);
 
 const comboRoutes = require("./routes/comboRoutes");
