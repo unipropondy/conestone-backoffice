@@ -1,6 +1,6 @@
-// const express = require("express");
-// const router = express.Router();
-// const { sql, poolPromise } = require("../db");
+const express = require("express");
+const router = express.Router();
+const { sql, poolPromise } = require("../db");
 
 // // ================= GET PARENT DISHES (ONLY COMBO DISHES) =================
 // router.get("/parent-dishes", async (req, res) => {
@@ -795,4 +795,4 @@
 //   }
 // });
 
-// module.exports = router;
+module.exports = router;
