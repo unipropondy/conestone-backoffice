@@ -36,9 +36,9 @@ app.use("/inventory", inventoryRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// const dashboardRoutes = require("./routes/dashboard");
+const dashboardRoutes = require("./routes/dashboard");
 
-// app.use("/api", dashboardRoutes);
+app.use("/api", dashboardRoutes);
 
 const rewardRoutes = require("./routes/rewardRoutes");
 
