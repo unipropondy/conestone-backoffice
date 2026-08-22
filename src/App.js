@@ -43,6 +43,7 @@ import Organization from "./pages/Organization";
 import DishOrderItemShare from "./pages/DishOrderItemShare";
 import QRCode from "./pages/QRCode";
 import PromoCodeMaster from "./pages/PromoCodeMaster";
+import QR from "./pages/qr";
 
 
 
@@ -82,7 +83,7 @@ function Layout() {
           <Route path="/RewardPoints" element={<RewardPoints />} />
           <Route path="/Vendormaster" element={<VendorMaster />} />
           <Route path="/Member" element={<Member />} />
-           <Route path="/Member/:id" element={<Member />} />
+          <Route path="/Member/:id" element={<Member />} />
           <Route path="/Paymode" element={<Paymode />} />
           <Route path="/PickList" element={<PickList />} />
           <Route path="/Terminal" element={<Terminal />} />
@@ -96,23 +97,24 @@ function Layout() {
           <Route path="/HappyHours" element={<HappyHours show={true} />} />
           <Route path="/POSPermission" element={<POSPermission show={true} />} />
           <Route path="/StockPage" element={<StockPage show={true} />} />
-              {/* 🔥 PURCHASE ORDER */}
-        <Route path="/StockEntryPage" element={<StockEntryPage />} />
-        <Route path="/StockEntryPage/:tranNo" element={<StockEntryPage />} />
-            {/* 🔥 PURCHASE INVOICE */}
-        <Route path="/StockEntryPurInv" element={<StockEntryPurInv />} />
-        <Route path="/StockEntryPurInv/:tranNo" element={<StockEntryPurInv />} />
+          {/* 🔥 PURCHASE ORDER */}
+          <Route path="/StockEntryPage" element={<StockEntryPage />} />
+          <Route path="/StockEntryPage/:tranNo" element={<StockEntryPage />} />
+          {/* 🔥 PURCHASE INVOICE */}
+          <Route path="/StockEntryPurInv" element={<StockEntryPurInv />} />
+          <Route path="/StockEntryPurInv/:tranNo" element={<StockEntryPurInv />} />
 
-        {/* 🔥 PURCHASE RETURN */}
-        <Route path="/StockEntryPurRet" element={<StockEntryPurRet />} />
-        <Route path="/StockEntryPurRet/:tranNo" element={<StockEntryPurRet />} />
-        <Route path="/ServiceMaster" element={<ServerMaster />} />
-       <Route path="/tablemaster" element={<TableMaster />} />
-       <Route path="/Organization" element={<Organization />} />
-       <Route path="/QRCode" element={<QRCode />} />
-       <Route path="/DishOrderItemShare" element={<DishOrderItemShare />} />
-        <Route path="/PromoCodeMaster" element={<PromoCodeMaster />} />
-       </Routes>
+          {/* 🔥 PURCHASE RETURN */}
+          <Route path="/StockEntryPurRet" element={<StockEntryPurRet />} />
+          <Route path="/StockEntryPurRet/:tranNo" element={<StockEntryPurRet />} />
+          <Route path="/ServiceMaster" element={<ServerMaster />} />
+          <Route path="/tablemaster" element={<TableMaster />} />
+          <Route path="/Organization" element={<Organization />} />
+          <Route path="/QRCode" element={<QRCode />} />
+          <Route path="/DishOrderItemShare" element={<DishOrderItemShare />} />
+          <Route path="/PromoCodeMaster" element={<PromoCodeMaster />} />
+          <Route path="/qr" element={<QR />} />
+        </Routes>
       </div>
     </>
   );
@@ -121,13 +123,13 @@ function Layout() {
 function App() {
   return (
     // <LoaderProvider>   {/* 🔥 ADD THIS */}
-      <BrowserRouter>
+    <BrowserRouter>
 
-        {/* <GlobalLoader />   🔥 ADD THIS */}
+      {/* <GlobalLoader />   🔥 ADD THIS */}
 
-        <Layout />
+      <Layout />
 
-      </BrowserRouter>
+    </BrowserRouter>
     // </LoaderProvider>
   );
 }
