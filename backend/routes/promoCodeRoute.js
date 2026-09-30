@@ -94,11 +94,10 @@ router.post("/", async (req, res) => {
 
     let promoImageBuffer = null;
 
-    if (PromoImage) {
+    if (PromoImage && typeof PromoImage === "string" && PromoImage.startsWith("data:")) {
       const base64Data = PromoImage.includes(",")
         ? PromoImage.split(",")[1]
         : PromoImage;
-
       promoImageBuffer = Buffer.from(base64Data, "base64");
     }
 

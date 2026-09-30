@@ -30,7 +30,7 @@ export default function PromoCodeMaster() {
         setPromoCodes(res.data.data);
       }
     } catch (err) {
-      console.error(err);
+      console.error("FETCH PROMO ERROR:", err);
     }
   };
 
@@ -124,9 +124,12 @@ export default function PromoCodeMaster() {
       setShowModal(false);
 
     } catch (err) {
-
-      console.error(err);
-
+      console.error("PROMO SAVE ERROR:", err.response?.data || err);
+      alert(
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Save failed: " + (err.message || "Unknown error")
+      );
     }
 
   };
