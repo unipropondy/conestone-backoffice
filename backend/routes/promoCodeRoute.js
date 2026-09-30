@@ -118,13 +118,16 @@ router.post("/", async (req, res) => {
       });
     }
 
+    const discountValuePost = DiscountValue !== undefined && DiscountValue !== "" ? parseFloat(DiscountValue) : 0;
+    const maxUsagePost = MaxUsage !== undefined && MaxUsage !== "" ? parseInt(MaxUsage) : 0;
+
     await pool.request()
       .input("PromoId", sql.UniqueIdentifier, PromoId)
       .input("PromoCode", sql.NVarChar, PromoCode)
-      .input("PromoName", sql.NVarChar, PromoName)
-      .input("DiscountType", sql.NVarChar, DiscountType)
-      .input("DiscountValue", sql.Decimal(18, 2), DiscountValue || 0)
-      .input("MaxUsage", sql.Int, MaxUsage || 0)
+      .input("PromoName", sql.NVarChar, PromoName || "")
+      .input("DiscountType", sql.NVarChar, DiscountType || "")
+      .input("DiscountValue", sql.Decimal(18, 2), discountValuePost)
+      .input("MaxUsage", sql.Int, maxUsagePost)
       .input("UsedCount", sql.Int, UsedCount || 0)
       .input("PromoImage", sql.VarBinary(sql.MAX), promoImageBuffer)
       .input("IsActive", sql.Bit, IsActive ?? true)
@@ -154,7 +157,6 @@ router.post("/", async (req, res) => {
         @PromoImage,
         @IsActive
       )
-      
       `);
 
     res.json({
@@ -193,13 +195,14 @@ router.put("/:id", async (req, res) => {
     const pool = await poolPromise;
 
     let promoImageBuffer = null;
+    let hasNewImage = false;
 
-    if (PromoImage) {
+    if (PromoImage && typeof PromoImage === "string" && PromoImage.startsWith("data:")) {
       const base64Data = PromoImage.includes(",")
         ? PromoImage.split(",")[1]
         : PromoImage;
-
       promoImageBuffer = Buffer.from(base64Data, "base64");
+      hasNewImage = true;
     }
 
     const existingPromo = await pool.request()
@@ -219,36 +222,38 @@ router.put("/:id", async (req, res) => {
       });
     }
 
-    await pool.request()
+    const discountValue = DiscountValue !== undefined && DiscountValue !== "" ? parseFloat(DiscountValue) : 0;
+    const maxUsage = MaxUsage !== undefined && MaxUsage !== "" ? parseInt(MaxUsage) : 0;
 
+    const request = pool.request()
       .input("PromoId", sql.UniqueIdentifier, req.params.id)
       .input("PromoCode", sql.NVarChar, PromoCode)
-      .input("PromoName", sql.NVarChar, PromoName)
-      .input("DiscountType", sql.NVarChar, DiscountType)
-      .input("DiscountValue", sql.Decimal(18, 2), DiscountValue)
-      .input("MaxUsage", sql.Int, MaxUsage)
+      .input("PromoName", sql.NVarChar, PromoName || "")
+      .input("DiscountType", sql.NVarChar, DiscountType || "")
+      .input("DiscountValue", sql.Decimal(18, 2), discountValue)
+      .input("MaxUsage", sql.Int, maxUsage)
       .input("UsedCount", sql.Int, UsedCount || 0)
-      .input("PromoImage", sql.VarBinary(sql.MAX), promoImageBuffer)
-      .input("IsActive", sql.Bit, IsActive ?? true)
+      .input("IsActive", sql.Bit, IsActive ?? true);
 
-      .query(`
+    let updateQuery;
+    if (hasNewImage) {
+      request.input("PromoImage", sql.VarBinary(sql.MAX), promoImageBuffer);
+      updateQuery = `
+        UPDATE PromoCodeMaster
+        SET PromoCode=@PromoCode, PromoName=@PromoName, DiscountType=@DiscountType,
+            DiscountValue=@DiscountValue, MaxUsage=@MaxUsage, UsedCount=@UsedCount,
+            PromoImage=@PromoImage, IsActive=@IsActive
+        WHERE PromoId=@PromoId`;
+    } else {
+      updateQuery = `
+        UPDATE PromoCodeMaster
+        SET PromoCode=@PromoCode, PromoName=@PromoName, DiscountType=@DiscountType,
+            DiscountValue=@DiscountValue, MaxUsage=@MaxUsage, UsedCount=@UsedCount,
+            IsActive=@IsActive
+        WHERE PromoId=@PromoId`;
+    }
 
-      UPDATE PromoCodeMaster
-
-      SET
-
-      PromoCode=@PromoCode,
-      PromoName=@PromoName,
-      DiscountType=@DiscountType,
-      DiscountValue=@DiscountValue,
-      MaxUsage=@MaxUsage,
-      UsedCount=@UsedCount,
-      PromoImage=@PromoImage,
-      IsActive=@IsActive
-
-      WHERE PromoId=@PromoId
-
-      `);
+    await request.query(updateQuery);
 
     res.json({
       success: true,
